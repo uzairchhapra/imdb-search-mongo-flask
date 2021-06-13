@@ -115,10 +115,11 @@ def logout():
 
 @app.route('/search', methods=['POST'])
 def search():
-    """A POST API that takes all name, director, genre, 99popularity, imdb_score as 
+    """A POST API that takes all name, director, genre, 99popularity, imdb_score as form Data.
+    Creates a custom search query based on the values passed and returns JSON of result.
 
     Returns:
-        [type]: [description]
+        JSON: Returns filtered results as JSON based on search parameters.
     """
     if request.method == 'POST':
         query=customSearch(request.form.get('name'),request.form.get('director'),request.form.getlist('genre'), request.form.getlist('99popularity'), request.form.getlist('imdb_score'))
@@ -136,6 +137,8 @@ def search():
 
 @app.route('/edit', methods=['POST'])
 def edit():
+    """Edit API which takes in all the new values of a particular Object ID.
+    """
     if request.method == 'POST':
         try:
             print(request.form['genre'], type(request.form['genre']))
@@ -161,6 +164,8 @@ def edit():
 
 @app.route('/add', methods=['POST'])
 def add():
+    """Add API that adds all parameters of a movie as a new entry in the database.
+    """
     if request.method == 'POST':
         try:
             print('new')

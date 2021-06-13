@@ -5,6 +5,15 @@ from re import compile, IGNORECASE
 from enum import Enum
 
 def getOperatorQuery(values:list):
+    """Takes a List of values. The List should contain only 2 elements. The first element should be a operator.
+    The second element should be a numeric/float value.
+
+    Args:
+        values (list): 0th Index - Operator, 1st Index - Numeric Value
+
+    Returns:
+        dict: Returns dictionary of Mongodb query of operator
+    """
     if(values[0]=='>'):
         return {'$gt':float(values[1])}
     elif(values[0]=='>='):
@@ -20,6 +29,18 @@ def getOperatorQuery(values:list):
 
 
 def customSearch(name:str, director:str, genre:list, _99popularity:list, imdb_score:list):
+    """Takes movie attributes and creates a combined mongodb search query.
+
+    Args:
+        name (str): Name of Movie
+        director (str): Description of Movie
+        genre (list): List of Genre of Movie
+        _99popularity (list): List which contains operator and value of 99popularity
+        imdb_score (list): List which contains operator and value of IMDb Score
+
+    Returns:
+        str : Returns Mongodb Search Query
+    """
     query={}
     if name:
         query["name"]=compile(f'.*{name}.*', IGNORECASE)

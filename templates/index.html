@@ -55,8 +55,9 @@
             <br>
             <br>
         </div>
-        <div class="form-group">
-            <div class="col-sm-2">
+        <div class="form-group" style="
+        margin-bottom: 19%;">
+            <div class=" col-sm-2">
                 <label for="exampleInputEmail1">Operator</label>
                 <select class="form-control" name="imdb_score" placeholder="Operator">
                     <option value="=" selected>=</option>
@@ -109,7 +110,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-4 col-md-offset-4">
+                        <div class="col-sm-12">
                             <form class='editMovie' method=POST action="{{ url_for('edit') }}">
                                 <div class="form-group" hidden>
                                     <label for="exampleInputEmail1">Doc ID</label>
@@ -164,7 +165,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-4 col-md-offset-4">
+                        <div class="col-sm-12">
                             <form class='addMovie' method=POST action="{{ url_for('add') }}">
                                 <div class="form-group" hidden>
                                     <label for="exampleInputEmail1">Doc ID</label>

@@ -12,22 +12,12 @@ const fetchGenreList = async () => {
         option.setAttribute('value', genre)
         return option
     })
+
+    // Populate the list on UI
     $('.advanced-search select').append(...genreList)
-
-    // document.querySelector('.advanced-search select')
-
-    // $('.dropdown-mul-1').dropdown({
-    //     data: data,
-    //     limitCount: 40,
-    //     input: '<input type="text" maxLength="20" placeholder="Search">',
-    //     choice: function () {
-    //         console.log(arguments[1].id, this,);
-    //         console.log($(`.dropdown - mul - 1 select option[value = ${ arguments[1].id }]`).attr('selected', 'selected'))
-    //     }
-    // });
 }
 
-// Fucntion to Delete Selected Record
+// Function to Delete Selected Record
 const deleteRecord = async (id) => {
     let formData = new FormData()
     formData.append('id', id)
@@ -44,56 +34,13 @@ const deleteRecord = async (id) => {
     submitSearch()
 }
 
-// const addOrEdit = async (e) => {
-//     try {
-//         e.preventDefault();
-//     } catch (error) {
-
-//     }
-
-//     console.log('submitted')
-//     console.log(document.querySelector(".editMovie form"))
-//     console.log(new FormData($(".editMovie form")[0]))
-//     values = new FormData($(".editMovie")[0])
-//     const data = new URLSearchParams(values);
-//     console.log('doc id', values.get('id'))
-
-//     //Empty Values if present in Modal
-//     $('.editMovie input[name="id"').val('')
-//     $('.editMovie input[name="name"').val('')
-//     $('.editMovie input[name="director"').val('')
-//     $('.editMovie input[name="genre"').val('')
-//     $('.editMovie input[name="99popularity"').val('')
-//     $('.editMovie input[name="imdb_score"').val('')
-
-//     let options
-//     if (values.get('id')) {
-//         options = {
-//             method: 'POST',
-//             mode: 'no-cors',
-//             body: data
-//         }
-//     }
-//     else {
-//         options = {
-//             method: 'PUT',
-//             // mode: 'no-cors',
-//             body: data
-//         }
-//     }
-
-//     const response = await fetch('/editMovie', options);
-//     // const moviesData = await response.json()
-// }
-
 const submitSearch = async (e) => {
     try {
         e.preventDefault();
     } catch (error) {
+        //This is helpful in case where submitSearch() function is not called by a submit event
+        console.log(error);
     }
-    console.log('submitted')
-    console.log(document.querySelector(".advanced-search form"))
-    console.log(new FormData($(".advanced-search form")[0]))
     values = new FormData($(".advanced-search")[0])
     const data = new URLSearchParams(values);
 
@@ -107,15 +54,18 @@ const submitSearch = async (e) => {
     let columnsToHide = [0] //Hide Document ID Column
     console.log(moviesData)
     if (!moviesData['admin']) {
-        columnsToHide.push(6) //Operations Column
+        columnsToHide.push(6) //Operations Column which contains Edit and Delete Options
     }
 
+    // If condition to check if Data Table has already been initialized
     if ($.fn.dataTable.isDataTable('#movies')) {
         console.log('table exists')
         table = $('#movies').DataTable();
         table.clear();
         table.rows.add(moviesData['data']).draw();
     }
+
+    // Else condition to create new instance of Data Table
     else {
         console.log('new table')
         moviesTable = $('#movies').DataTable({
