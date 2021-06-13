@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, session, redirect, jsonify
 from flask_pymongo import PyMongo
 import bcrypt
+import secrets
 from flask.json import JSONEncoder
 from bson import ObjectId
 from encoder import CustomJSONEncoder
@@ -176,5 +177,5 @@ def add():
             return render_template('index.html',fail='Failed to Insert Movie!')
 
 if __name__ == '__main__':
-    app.secret_key = 'mysecret'
+    app.secret_key = secrets.token_urlsafe(16)
     app.run(debug=True)
