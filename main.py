@@ -8,6 +8,7 @@ from encoder import CustomJSONEncoder
 from customSearch import customSearch
 
 app = Flask(__name__)
+app.secret_key = secrets.token_urlsafe(16)
 
 app.json_encoder = CustomJSONEncoder
 
@@ -177,5 +178,4 @@ def add():
             return render_template('index.html',fail='Failed to Insert Movie!')
 
 if __name__ == '__main__':
-    app.secret_key = secrets.token_urlsafe(16)
     app.run(debug=True)
