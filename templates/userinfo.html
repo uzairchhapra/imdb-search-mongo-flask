@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block body %}
+<!-- <div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            {% if session['username'] %}
+            <p>Welcome {{ session['username'] }}</p>
+            <a href="{{ url_for('logout') }}">Logout</a>.
+            {% else %}
+            <div>
+                <a href="{{ url_for('login') }}">Login</a>.
+            </div>
+            <br>
+            <div>
+                Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a>.
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+<br> -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">IMDb Movie Search</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            {% if session['admin'] %}
+            <li><a data-toggle="modal" data-target="#add">Insert Movie</a></li>
+            {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if session['username'] %}
+            <li><a href="#" class=".disabled-link"><span class="glyphicon glyphicon-user"></span>Welcome {{
+                    session['username'] }}</a></li>
+            <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            {% else %}
+            <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+            <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span>register</a></li>
+
+            {% endif %}
+
+        </ul>
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
+{% endblock %}
