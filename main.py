@@ -31,6 +31,11 @@ def getAdminStatus():
 
 @app.route('/genre')
 def genre():
+    """Fetches a distinct list of all genres in the database.
+
+    Returns:
+        JSON: JSONArray of Unique Genres in the Database
+    """
     genreList=list(mongo.db.movies.distinct('genre'))
     # response=[]
     # for i in range(len(genreList)):
@@ -39,8 +44,13 @@ def genre():
     # return jsonify(response)
     return jsonify(genreList)
 
-@app.route('/delete', methods=['POST','GET'])
+@app.route('/delete', methods=['POST'])
 def delete():
+    """Deletes a Particular Movie and all its parameters using the unique Mongodb ObjectId
+
+    Returns:
+        JSON: Returns the delted movie object
+    """
     if request.method == 'POST':
         print(request.values.get('id'))
         deletedMovie=mongo.db.movies.find_one_and_delete({'_id' : ObjectId(request.form['id'])})
@@ -48,13 +58,15 @@ def delete():
 
 @app.route('/login', methods=['POST','GET'])
 def login():
+    """If the request is a GET request, it renders the login page.
+    If the request is a POST request, it validates user's credentials.
+    If the credentials are valid, it sets the session attribute. Else, it returns an error string.
+    """
     if request.method == 'POST':
         users = mongo.db.users
         login_user = users.find_one({'name' : request.form['username']})
-        print(login_user)
 
         if login_user:
-            # if bcrypt.hashpw(str(request.form['pass']).encode('utf-8'), str(login_user['password']).encode('utf-8')) == str(login_user['password']).encode('utf-8'):
             if bcrypt.checkpw(request.form['pass'].encode('utf-8'),login_user['password']):
                 session['username'] = request.form['username']
                 session['admin'] = login_user['admin']
@@ -64,7 +76,12 @@ def login():
     return render_template('login.html')
 
 @app.route('/register', methods=['POST', 'GET'])
-def register():
+def register(): 
+    """If the request is a GET request, it renders the register page.
+    If the request is a POST request, it checks if the user already exists.
+    If not, then it creates a new record in the database. The password is encrypted and stored.
+
+    """
     if request.method == 'POST':
         users = mongo.db.users
         admin=False
@@ -86,20 +103,21 @@ def register():
 
 @app.route('/logout')
 def logout():
+    """Logs out the user by clearing the session.
+
+    Returns:
+        IndexPage: Redirects to the Home Page
+    """
     session.clear()
     return redirect(url_for('index'))
 
-@app.route('/movies', methods=['POST', 'GET'])
-def movies():
-    if request.method == 'POST':
-        movies = list(mongo.db.movies.find({}))
-        response={}
-        response['admin']=True
-        response['data']=movies
-        return jsonify(response)
-
-@app.route('/search', methods=['POST', 'GET'])
+@app.route('/search', methods=['POST'])
 def search():
+    """A POST API that takes all name, director, genre, 99popularity, imdb_score as 
+
+    Returns:
+        [type]: [description]
+    """
     if request.method == 'POST':
         query=customSearch(request.form.get('name'),request.form.get('director'),request.form.getlist('genre'), request.form.getlist('99popularity'), request.form.getlist('imdb_score'))
         print(query)
@@ -134,9 +152,9 @@ def edit():
             }},
             )
             print(selectedMovie)
-            return render_template('index',success='Movie Edited!')
+            return render_template('index.html',success='Movie Edited!')
         except Exception:
-            return render_template('index',fail='Failed to Edit Movie!')
+            return render_template('index.html',fail='Failed to Edit Movie!')
 
 
 @app.route('/add', methods=['POST'])
@@ -155,7 +173,7 @@ def add():
             newMovie = mongo.db.movies.insert_one(values)
             return render_template('index.html',success='New Movie Inserted!')
         except Exception:
-            return render_template('index',fail='Failed to Insert Movie!')
+            return render_template('index.html',fail='Failed to Insert Movie!')
 
 if __name__ == '__main__':
     app.secret_key = 'mysecret'
